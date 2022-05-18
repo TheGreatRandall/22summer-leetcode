@@ -120,3 +120,59 @@ class Solution {
     
 
 }
+
+567. permutation in string. //slide window and map 
+
+--------my solution with bug
+class Solution {
+    public boolean checkInclusion(String s1, String s2) {
+        int windowLen = s1.length();
+        int left = 0;
+        boolean result = false;
+        while(result == false && (left + windowLen <= s2.length())){
+            result = ifPermutation(s1,s2.substring(left,left+windowLen));
+
+
+            left++;
+        }
+        return result;
+        
+    }
+    public static boolean ifPermutation(String str, String pattern){
+        boolean result = true;
+        //assume str.length = pattern.length
+
+        Map<Character,Integer> map1 = new HashMap<>();
+        Map<Character,Integer> map2 = new HashMap<>();
+        for(int i = 0; i < str.length(); i++){
+          if(map1.containsKey(str.charAt(i))){
+            map1.put(str.charAt(i),map1.get(str.charAt(i)+1));
+          }else{
+            map1.put(str.charAt(i),1);
+          }
+
+          if(map2.containsKey(pattern.charAt(i))){
+            map2.put(pattern.charAt(i),map2.get(pattern.charAt(i)+1));
+          }else{
+            map2.put(pattern.charAt(i),1);
+          }
+        }
+        int j = 0;
+        while(result == true && j < str.length()){
+            char s = str.charAt(j);
+            
+            if(map2.containsKey(s) == false){
+                result = false;
+            }else if(map2.get(s) != map1.get(s)){
+                result = false;
+            }
+            
+            
+            j++;
+        } 
+
+
+
+        return result;
+      }
+}
